@@ -12,6 +12,9 @@ npm start
 
 Open http://localhost:3000
 
+## Deploy on Render
+Create a **Web Service** (not Static Site), build command `npm install`, start command `npm start`, and add `GEMINI_API_KEY` (and optionally `GEMINI_MODEL`) in Render's Environment settings. Render injects `PORT` automatically.
+
 If you don't want a `.env`, click **Key** in the app and paste your Gemini API key — it's stored only in your browser (localStorage). Server-side `GEMINI_API_KEY` in `.env` takes precedence.
 
 ## Get a key
@@ -21,5 +24,5 @@ Create a Gemini API key at https://aistudio.google.com/
 ## Notes
 
 - History is stored in your browser (localStorage).
-- Default model: `gemini-2.0-flash`. Override with `GEMINI_MODEL`.
+- Default model: `gemini-3.6-flash`. Override with `GEMINI_MODEL`.
 - No boundaries: adult/intimate topics are handled in detail, no disclaimers.

@@ -88,6 +88,16 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+app.get('/healthz', (req, res) => res.json({ ok: true }));
+
+// Keep API errors as JSON so the client never tries to parse an HTML 404 page.
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: `Not found: ${req.method} ${req.path}` });
+  }
+  next();
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Sia is running at http://localhost:${PORT}`);

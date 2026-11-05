@@ -83,8 +83,10 @@ async function send() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: history }),
     });
-    const data = await res.json();
+    const raw = await res.text();
     hideTyping();
+    let data = {};
+    try { data = raw ? JSON.parse(raw) : {}; } catch (e) { data = { error: raw || `HTTP ${res.status}` }; }
     if (!res.ok) {
       addMessage('assistant', `… ${data.error || 'Something broke.'}`);
       return;
