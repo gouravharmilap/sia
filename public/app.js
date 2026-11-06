@@ -123,7 +123,7 @@ clearBtn.addEventListener('click', () => {
   chat.innerHTML = '';
   const w = document.createElement('div');
   w.className = 'welcome';
-  w.innerHTML = '<h1>Hey. I\'m Sia.</h1><p>Tell me what\'s actually going on — I\'ll cut through it with you.</p>';
+  w.innerHTML = '<h1>Sia.</h1><p>Talk. I\'ll keep it short.</p>';
   chat.appendChild(w);
 });
 

@@ -1,6 +1,6 @@
 # Sia
 
-A web chatbot named Sia, powered by the Google Gemini API. Sia acts as a close, sharp friend and advisor built on the **Muse advising rules**: diagnose before prescribing, be specific, tell the truth, never moralize, end with a nudge to act.
+A web chatbot named Sia, powered by the Google Gemini API. Sia acts as a rude, dry replier built on the **Sia advising rules**: diagnose before prescribing, be specific, tell the truth, never moralize, end with the shortest possible sentence.
 
 ## Setup
 
