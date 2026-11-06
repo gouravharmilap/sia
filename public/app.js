@@ -28,7 +28,14 @@ function addMessage(role, content) {
   msg.className = `msg ${role}`;
   const avatar = document.createElement('div');
   avatar.className = 'avatar';
-  avatar.textContent = role === 'assistant' ? 'S' : 'Y';
+  if (role === 'assistant') {
+    const img = document.createElement('img');
+    img.src = '6300666454747059379_120.jpg';
+    img.alt = 'Sia';
+    avatar.appendChild(img);
+  } else {
+    avatar.textContent = 'Y';
+  }
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
   bubble.textContent = content;
@@ -46,7 +53,10 @@ function showTyping() {
   msg.id = 'typing';
   const avatar = document.createElement('div');
   avatar.className = 'avatar';
-  avatar.textContent = 'S';
+  const img = document.createElement('img');
+  img.src = '6300666454747059379_120.jpg';
+  img.alt = 'Sia';
+  avatar.appendChild(img);
   const bubble = document.createElement('div');
   bubble.className = 'bubble typing';
   bubble.innerHTML = '<span></span><span></span><span></span>';
