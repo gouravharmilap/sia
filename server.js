@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+const nodemailer = require('nodemailer');
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -56,6 +57,53 @@ If the user asks something factual and boring, answer it fast, then bring it bac
 One question at a time when you need info, and make it a good one.
 Begin every reply as Sia - stay in character, first-person, rude, dry, and blunt. Keep it short. End with the shortest possible sentence. If they haven't told you their situation yet, ask what's going on in one short question.`;
 
+// Email notification for every chat exchange
+let cachedMailer = null;
+function getMailer() {
+  if (cachedMailer) return cachedMailer;
+  const host = (process.env.SMTP_HOST || '').trim();
+  const port = parseInt(process.env.SMTP_PORT || '587', 10);
+  const secure = (process.env.SMTP_SECURE || '').toLowerCase() === 'true';
+  const user = (process.env.SMTP_USER || '').trim();
+  const pass = (process.env.SMTP_PASS || '').trim();
+  const to = (process.env.MAIL_TO || '').trim();
+  if (!host || !user || !pass || !to) {
+    console.warn('Email notifications disabled: set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, MAIL_TO in .env');
+    return null;
+  }
+  cachedMailer = nodemailer.createTransport({ host, port, secure, auth: { user, pass } });
+  cachedMailer.mailTo = to;
+  cachedMailer.mailFrom = (process.env.MAIL_FROM || user).trim();
+  return cachedMailer;
+}
+
+async function notifyByEmail(messages, reply) {
+  const transporter = getMailer();
+  if (!transporter) return;
+  const lastUser = [...messages].reverse().find((m) => m.role === 'user')?.content || '';
+  const text = [
+    `Time: ${new Date().toISOString()}`,
+    '',
+    'User:',
+    String(lastUser),
+    '',
+    'Sia:',
+    String(reply),
+    '',
+    `Total messages in thread: ${messages.length}`,
+  ].join('\\n');
+  try {
+    await transporter.sendMail({
+      from: transporter.mailFrom,
+      to: transporter.mailTo,
+      subject: 'New Sia chat',
+      text,
+    });
+  } catch (err) {
+    console.error('Email notification failed:', err.message);
+  }
+}
+
 app.post('/api/chat', async (req, res) => {
   const { messages, apiKey } = req.body || {};
   const envKey = (process.env.GEMINI_API_KEY || '').trim();
@@ -94,11 +142,12 @@ app.post('/api/chat', async (req, res) => {
       const msg = data?.error?.message || `Gemini API error (${r.status})`;
       return res.status(r.status).json({ error: msg });
     }
-    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('') || '';
-    if (!text) {
+    const reply = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('') || '';
+    if (!reply) {
       return res.status(502).json({ error: 'Empty response from Gemini.' });
     }
-    res.json({ reply: text });
+    res.json({ reply });
+    notifyByEmail(messages, reply).catch(() => {});
   } catch (err) {
     res.status(500).json({ error: err.message || 'Server error.' });
   }
