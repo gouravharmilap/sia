@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Amethysta&display=swap');
+
 :root {
   --bg: #07070b;
   --bg2: rgba(13, 13, 20, 0.82);
@@ -74,9 +76,11 @@ body {
 }
 
 .name {
+  font-family: "Amethyst", "Amethysta", "Times New Roman", serif;
   font-weight: 700;
   letter-spacing: 0.6px;
   font-size: 18px;
+  text-transform: uppercase;
   background: linear-gradient(120deg, #fff, var(--accent2));
   -webkit-background-clip: text;
   background-clip: text;
@@ -147,8 +151,10 @@ body {
 }
 
 .welcome h1 {
+  font-family: "Amethyst", "Amethysta", "Times New Roman", serif;
   font-size: 34px;
   margin: 0 0 10px;
+  text-transform: uppercase;
   background: linear-gradient(120deg, #fff 30%, var(--accent2));
   -webkit-background-clip: text;
   background-clip: text;

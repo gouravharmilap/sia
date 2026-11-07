@@ -133,7 +133,7 @@ clearBtn.addEventListener('click', () => {
   chat.innerHTML = '';
   const w = document.createElement('div');
   w.className = 'welcome';
-  w.innerHTML = '<img src="logo.png" alt="Micro Nova" class="splash-logo" /><h1>Sia.</h1><p>Talk. I\'ll keep it short.</p><p class="hint">One line. Go.</p>';
+  w.innerHTML = '<img src="logo.png" alt="Micro Nova" class="splash-logo" /><h1>SIA.</h1><p>Talk. I\'ll keep it short.</p><p class="hint">One line. Go.</p>';
   chat.appendChild(w);
 });
 
